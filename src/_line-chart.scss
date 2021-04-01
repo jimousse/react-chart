@@ -1,0 +1,25 @@
+$normal-size: 3px;
+$hover-size: 6px;
+
+.datapoint {
+  position: absolute;
+  height: $normal-size;
+  width: $normal-size;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background-color: orangered;
+  transition: height .2s, width .2s;
+
+  &.hover {
+    height: $hover-size;
+    width: $hover-size;
+    background-color: orchid;
+    z-index: 100;
+    opacity: .5;
+  }
+  
+}
+
+.line-container {
+  position: relative;
+}

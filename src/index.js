@@ -4,12 +4,11 @@ import ReactDOM from 'react-dom';
 import Container from './Container';
 
 const style = {
-  height: '500px',
-  width: '700px',
+  height: '150px',
+  width: '400px',
+  margin: '30px',
   resize: 'both',
-  overflow: 'auto',
-  border: '3px solid red',
-  boxSizing: 'border-box'
+  overflow: 'auto'
 };
 ReactDOM.render(
   <div style={style}>

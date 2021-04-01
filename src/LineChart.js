@@ -1,32 +1,73 @@
-import React from 'react';
-import { scaleLinear, line } from 'd3';
+import React, { useRef, useEffect, useState } from 'react';
 import Line from './Line';
+import { line, bisector, bisectLeft } from 'd3';
+import './_line-chart.scss';
 
 
 export default function LineChart(props) {
-  const { data, width, height } = props;
+  const lineContainerRef = useRef(null);
+  const [ hoveredPoint, setHoveredPoint ] = useState(null);
+  const { data, xScale, yScale } = props;
 
-  const xScale = scaleLinear()
-  .domain([ 0 , data[data.length - 1].x ])
-  .range([ 0, width ]);
+  const handleMouseOver = (e) => {
+    const { offsetX, clientY } = e;
+    const xValue = xScale.invert(offsetX);
+    const fn = bisector(d => d.x).left;
+    const test = fn(data, xValue);
+    setHoveredPoint(`datapoint_${test}`);
+  };
 
-  const yScale = scaleLinear()
-  .domain([ 0 , data[data.length - 1].y ])
-  .range([ height, 0 ]);
+  const handleMouseOut = (e) => {
+    setHoveredPoint(null);
+  };
+
+  useEffect(() => {
+    if (!lineContainerRef.current) return;
+    lineContainerRef.current.addEventListener('mousemove', handleMouseOver);
+    lineContainerRef.current.addEventListener('mouseout', handleMouseOut);
+
+    return () => {
+      if (!lineContainerRef.current) return;
+      lineContainerRef.current.removeEventListener('mousemove', handleMouseOver);
+      lineContainerRef.current.removeEventListener('mouseout', handleMouseOut);
+    };
+  }, [ handleMouseOver ]);
+
+  if (!xScale || !yScale) return null;
+
 
   const lineGenerator = line()
     .x(d => xScale(d.x))
     .y(d => yScale(d.y));
 
   const d = lineGenerator(data);
-
   return (
-    <svg
-      height={props.height}
-      width={props.width}
-      style={{ verticalAlign: 'middle' }} // to prevent infinite growing loop
-    >
-      <Line path={d} color={props.color} />
-    </svg>
+    <div ref={lineContainerRef} className="line-container">
+      {data.map(({ x, y }, i) => {
+          const id = `datapoint_${i}`;
+          const classes = [ 'datapoint' ];
+          if (id === hoveredPoint) {
+            classes.push('hover');
+          }
+          return (
+            <span 
+              id={id}
+              className={classes.join(' ')}
+              style= {{
+                left: xScale(x),
+                top: yScale(y)
+              }}
+            />
+          );
+      })}
+      <svg
+        style={{ 
+          height: '100%',
+          width: '100%'
+        }}
+      >
+        <Line path={d} color={props.color} />
+      </svg>
+    </div>
   );
 }

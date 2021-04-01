@@ -1,0 +1,62 @@
+$label-color:#666666;
+$tick-color:#e6e6e6;
+.axis {
+  white-space: nowrap;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.ticks {
+  height: 100%;
+  position: relative;
+}
+
+.tick {
+  display: inline-block;
+  font-size: 10px;
+  line-height: 1.2;
+  &:not(:last-child) {
+    margin-right: 10px;
+  }
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  &:before {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 4px;
+    background-color: $tick-color;
+    transform: translateX(-50%);
+  }
+
+  &:first-child > .tick-label, &:first-child:before {
+    transform: translateX(0%);
+  }
+
+  &:last-child  > .tick-label, &:last-child:before {
+    transform: translateX(-100%);
+  }
+
+}
+
+.tick-label {
+  display: inline-block;
+  transform: translateX(-50%);
+  color: $label-color;
+  font-family: 'Lato';
+  font-size: 10px;
+}
+
+.axis-line {
+  height: 1px;
+  width: 100%;
+  background-color: $tick-color;
+}
+
+#canvas-measure {
+  display: none;
+}
