@@ -1,5 +1,5 @@
 $normal-size: 3px;
-$hover-size: 6px;
+$hover-size: 10px;
 
 .datapoint {
   position: absolute;
@@ -17,9 +17,9 @@ $hover-size: 6px;
     z-index: 100;
     opacity: .5;
   }
-  
 }
 
 .line-container {
+  height: 100%;
   position: relative;
 }

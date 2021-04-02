@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Line from './Line';
-import { line, bisector, bisectLeft } from 'd3';
+import { line, bisector } from 'd3';
 import './_line-chart.scss';
 
 
@@ -42,7 +42,10 @@ export default function LineChart(props) {
 
   const d = lineGenerator(data);
   return (
-    <div ref={lineContainerRef} className="line-container">
+    <div
+      style={{ width: props.width, marginLeft: props.left }}
+      ref={lineContainerRef}
+      className="line-container">
       {data.map(({ x, y }, i) => {
           const id = `datapoint_${i}`;
           const classes = [ 'datapoint' ];
@@ -50,21 +53,15 @@ export default function LineChart(props) {
             classes.push('hover');
           }
           return (
-            <span 
+            <span
               id={id}
               className={classes.join(' ')}
-              style= {{
-                left: xScale(x),
-                top: yScale(y)
-              }}
+              style= {{ left: xScale(x), top: yScale(y) }}
             />
           );
       })}
       <svg
-        style={{ 
-          height: '100%',
-          width: '100%'
-        }}
+        style={{ height: '100%', width: '100%' }}
       >
         <Line path={d} color={props.color} />
       </svg>
